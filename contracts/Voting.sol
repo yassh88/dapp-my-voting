@@ -8,15 +8,34 @@ import "hardhat/console.sol";
 // cast vote to any candiate
 // stop
 // showResult on timmer out
+error Voting_CandiateNameNotFound();
+
 contract Voting {
   mapping(string => uint256) s_candidatemap;
 
-  address[] numberOFVoter;
+  string[] s_candidateList;
 
-  constructor(string memory candiate1, string memory candiate2) payable {
-    s_candidatemap[candiate1] = 0;
-    s_candidatemap[candiate2] = 0;
-    console.log("address(this).balance");
+  constructor(string[] memory candiates) payable {
+    for (uint256 i = 0; i < candiates.length; i++) {
+      s_candidatemap[candiates[i]] = 0;
+      s_candidateList.push(candiates[i]);
+    }
     console.log(address(this).balance);
+  }
+
+  function getCandidateVote(string calldata name)
+    public
+    view
+    returns (uint256)
+  {
+    return s_candidatemap[name];
+  }
+
+  function getCandidateList() public view returns (string[] memory) {
+    return s_candidateList;
+  }
+
+  function voteToCandidate(string memory candiate) public {
+    s_candidatemap[candiate] = s_candidatemap[candiate] + 1;
   }
 }

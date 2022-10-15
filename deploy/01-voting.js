@@ -5,7 +5,8 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
 
   const { deployer } = await getNamedAccounts()
 
-  const args = ["Yashwant", "Sakshi"]
+  const args = []
+  args.push(["Yashwant", "Sakshi"])
   const rewardValue = await ethers.utils.parseEther(".1")
   console.log("chainid", network.config.chainId)
   const voting = await deploy("Voting", {
