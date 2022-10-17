@@ -25,8 +25,33 @@ describe("Voting", () => {
     let numOFCandidate = await voting.getCandidateList()
     expect(numOFCandidate).to.have.members(["Yashwant", "Sakshi"])
   })
-  it.only("Vote to condiate performUpkeep", async () => {
+  it("vote to candidate", async () => {
+    await voting.voteToCandidate("Yashwant")
+    await expect(voting.voteToCandidate("sakshi")).to.be.revertedWith(
+      "Voting_VoterAlreadyDoneVoting"
+    )
+  })
+  it("vote to candidate", async () => {
+    await voting.voteToCandidate("Yashwant")
+    await voting.connect(accounts[2]).voteToCandidate("sakshi")
+    let numOFCandidate = await voting.getCandidateVote("Yashwant")
+    assert.equal(numOFCandidate.toString(), 1)
+    numOFCandidate = await voting.getCandidateVote("sakshi")
+    assert.equal(numOFCandidate.toString(), 1)
+  })
+  it("Vote to condiate performUpkee without votes", async () => {
+    await network.provider.send("evm_increaseTime", [
+      votingPeriodTime.toNumber() + 1,
+    ])
+    await network.provider.request({ method: "evm_mine", params: [] })
+    await expect(voting.performUpkeep("0x")).to.be.revertedWith(
+      "Voting_WaitForAtLeastOneVote"
+    )
+  })
+  it("Vote to condiate performUpkeep with votes", async () => {
     voting.connect(accounts[2])
+    await voting.voteToCandidate("Yashwant")
+    await voting.connect(accounts[2]).voteToCandidate("sakshi")
     await network.provider.send("evm_increaseTime", [
       votingPeriodTime.toNumber() + 1,
     ])

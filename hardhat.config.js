@@ -1,6 +1,9 @@
 /** @type import('hardhat/config').HardhatUserConfig */
 require("@nomiclabs/hardhat-waffle")
 require("hardhat-deploy")
+require("solidity-coverage")
+require("hardhat-gas-reporter")
+
 module.exports = {
   solidity: "0.8.17",
   defaultNetwork: "hardhat",
@@ -9,6 +12,11 @@ module.exports = {
       url: "http://localhost:8545",
       chainId: 31337,
     },
+  },
+  gasReporter: {
+    currency: "CHF",
+    gasPrice: 21,
+    enabled: true,
   },
   namedAccounts: {
     deployer: {
