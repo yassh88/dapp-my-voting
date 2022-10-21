@@ -6,7 +6,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   const { deployer } = await getNamedAccounts()
 
   const args = []
-  const keepersUpdateInterval = "30"
+  const keepersUpdateInterval = "100"
   args.push(["Yashwant", "Sakshi"])
   args.push(keepersUpdateInterval)
   const rewardValue = await ethers.utils.parseEther(".1")
